@@ -1,0 +1,78 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Task List</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'todo_app/css/styles.css' %}">
+</head>
+<body>
+    <h2>Task List</h2>
+{#    <ul>#}
+{#        {% for task in tasks %}#}
+{#            <li>#}
+{#                <!-- Bootstrap checkbox for completing tasks -->#}
+{#                <div class="form-check">#}
+{#                    <input class="form-check-input" type="checkbox" {% if task.completed %}checked{% endif %} id="completeTask{{ task.id }}" onclick="completeTask({{ task.id }})">#}
+{#                    <label class="form-check-label" for="completeTask{{ task.id }}">#}
+{#                        {{ task.title }} - {{ task.description }} - Priority: {{ task.priority }}#}
+{#                    </label>#}
+{#                </div>#}
+{##}
+{#                <!-- Bootstrap button for completing tasks -->#}
+{#                {% if task.completed %}#}
+{#                    <span class="badge badge-success">(Completed)</span>#}
+{#                {% else %}#}
+{#                    <a href="{% url 'complete_task' task.id %}" class="btn btn-primary">Complete</a>#}
+{#                {% endif %}#}
+{#            </li>#}
+{#        {% endfor %}#}
+{#    </ul>#}
+{#    <ul>#}
+{#        {% for task in tasks %}#}
+{#            <li>#}
+{#                {{ task.title }} - {{ task.description }} - Priority: {{ task.priority }}#}
+{#                <a href="{% url 'complete_task' task.id %}">{% if task.completed %}<span class="badge badge-success">Completed</span>{% else %}<span class="badge badge-dark">Complete</span>{% endif %}</a>#}
+{#                <a href="{% url 'edit_task' task.id %}" class="badge badge-info">Edit</a>#}
+{#                <a href="{% url 'delete_task' task.id %}" class="badge badge-danger">Delete</a>#}
+{#            </li>#}
+{#        {% endfor %}#}
+{#    </ul>#}
+
+    {% for task in tasks %}
+        <!-- Bootstrap container for each task -->
+        <div class="container mt-4">
+            <!-- Bootstrap card for each task -->
+            <div class="card">
+                <div class="card-body">
+                    <!-- Bootstrap checkbox for completing tasks -->
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" {% if task.completed %}checked{% endif %} id="completeTask{{ task.id }}" onclick="completeTask({{ task.id }})">
+                        <label class="form-check-label" for="completeTask{{ task.id }}">
+                            {{ task.title }} - {{ task.description }} - Priority: {{ task.priority }}
+                        </label>
+                    </div>
+                    {% if task.completed %}
+                        <span class="badge badge-success"><a href="{% url 'complete_task' task.id %}"  class="text-white">Completed</a></span>
+                    {% else %}
+                        <span class="badge badge-dark"><a href="{% url 'complete_task' task.id %}"  class="text-white">Complete</a></span>
+                    {% endif %}
+
+                    <span class="badge badge-danger ml-2"><a href="{% url 'delete_task' task.id %}" class="text-white">Delete</a></span>
+                    <span class="badge badge-info ml-2"><a href="{% url 'edit_task' task.id %}" class="text-white">Edit</a></span>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    <form action="{% url 'add_task' %}" method="post">
+        {% csrf_token %}
+        <div class="text-center mt-5">
+            <button type="submit" class="btn btn-primary"> + Add task</button>
+        </div>
+    </form>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
