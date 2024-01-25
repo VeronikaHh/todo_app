@@ -1,1 +1,1 @@
-Django templates project to manage tasks. 
+Simple Django templates project to manage tasks with SQLite database.
