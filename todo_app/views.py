@@ -2,8 +2,21 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Task
 from .forms import TaskForm
 
+def more_priority_sort(task):
+    priority_order = {'high': 0, 'medium': 1, 'low': 2}
+    return (priority_order.get(task.priority, 3), -task.id)
+
 def task_list(request):
-    tasks = Task.objects.all()
+    filter_criteria = request.GET.get('filter', 'newest')
+
+    if filter_criteria == 'completed':
+        tasks = Task.objects.filter(completed=True).order_by('-id')
+    elif filter_criteria == 'uncompleted':
+        tasks = Task.objects.filter(completed=False).order_by('-id')
+    elif filter_criteria == 'more_priority':
+        tasks = sorted(Task.objects.all(), key=more_priority_sort)
+    else:
+        tasks = Task.objects.all().order_by('-id')
     return render(request, 'todo_app/task_list.html', {'tasks': tasks})
 
 def add_task(request):

@@ -10,25 +10,33 @@
     <link rel="stylesheet" type="text/css" href="{% static 'todo_app/css/styles.css' %}">
 </head>
 <body>
-    <h3 class="text-center m-3">🎀 Task List 🎀</h3>
-
-{#    <div class="m-2">#}
-{#        <h3 class="text-center">🎀 Task List 🎀#}
-{#            <span class="float-right pr-6">#}
-{#                <form action="{% url 'add_task' %}" method="post">#}
-{#                        {% csrf_token %}#}
-{#                        <div class="text-center">#}
-{#                            <button type="submit" class="btn btn-primary">#}
-{#                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">#}
-{#                                  <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>#}
-{#                                  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>#}
-{#                                </svg>#}
-{#                            </button>#}
-{#                        </div>#}
-{#                    </form>#}
-{#            </span>#}
-{#        </h3>#}
-{#    </div>#}
+    <div class="container my-5">
+        <span class="float-left ">
+            <div class="dropdown mt-4">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="filterDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Filter
+                </button>
+                <div class="dropdown-menu" aria-labelledby="filterDropdown">
+                    <a class="dropdown-item" href="?filter=newest">Newest</a>
+                    <a class="dropdown-item" href="?filter=completed">Completed</a>
+                    <a class="dropdown-item" href="?filter=uncompleted">Uncompleted</a>
+                    <a class="dropdown-item" href="?filter=more_priority">More Priority</a>
+                </div>
+            </div>
+        </span>
+        <h3 class="text-center">🎀 Task List 🎀
+            <span class="float-right mt-4">
+                <form action="{% url 'add_task' %}" method="post" >
+                        {% csrf_token %}
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-outline-dark">
+                                + Add task
+                            </button>
+                        </div>
+                    </form>
+            </span>
+        </h3>
+    </div>
 
     {% for task in tasks %}
         <!-- Bootstrap container for each task -->
@@ -37,7 +45,7 @@
             <div class="card">
                 <div class="card-body">
                     <!-- Bootstrap checkbox for completing tasks -->
-                    <div class="form-check">
+                    <div class="form-check mb-1">
                         <input class="form-check-input" type="checkbox" {% if task.completed %}checked{% endif %} id="completeTask{{ task.id }}" onclick="completeTask({{ task.id }})" action>
                             <div class="form-check-label" for="completeTask{{ task.id }}">
                                 <a href="#taskDescription{{ task.id }}" data-toggle="collapse" class="text-dark">{{ task.title }}
@@ -65,25 +73,18 @@
                         {{ task.description }}
                     </div>
                     {% if task.completed %}
-                        <span class="badge badge-success"><a href="{% url 'complete_task' task.id %}"  class="text-white">Completed</a></span>
+                        <a href="{% url 'complete_task' task.id %}"><span class="badge badge-success"> Completed </span></a>
                     {% else %}
-                        <span class="badge badge-dark"><a href="{% url 'complete_task' task.id %}"  class="text-white">Complete</a></span>
+                        <a href="{% url 'complete_task' task.id %}"><span class="badge badge-dark mr-2"> Complete </span></a>
                     {% endif %}
 
-                    <span class="badge badge-danger ml-2"><a href="{% url 'delete_task' task.id %}" class="text-white">Delete</a></span>
-                    <span class="badge badge-info ml-2"><a href="{% url 'edit_task' task.id %}" class="text-white">Edit</a></span>
+                    <a href="{% url 'edit_task' task.id %}"><span class="badge badge-info"> Edit </span></a>
+                    <a href="{% url 'delete_task' task.id %}"><span class="badge badge-danger "> Delete </span></a>
                 </div>
             </div>
         </div>
     {% endfor %}
-    <form action="{% url 'add_task' %}" method="post">
-        {% csrf_token %}
-        <div class="text-center mt-4">
-            <button type="submit" class="btn btn-primary">
-                + Add task
-            </button>
-        </div>
-    </form>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
